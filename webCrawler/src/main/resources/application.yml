@@ -1,0 +1,28 @@
+server:
+  address: 0.0.0.0
+  port: 8080
+
+chrome:
+  driver:
+    local:
+      path: ${CHROME_DRIVER_LOCAL_PATH:src/main/resources/lib/chromedriver}
+    docker:
+      path: ${CHROME_DRIVER_DOCKER_PATH:/opt/selenium/chromedriver-127.0.6533.72}
+
+
+spring:
+  application:
+    name: webCrawler
+
+  data:
+    mongodb:
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/stocks}
+
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          mongodb:
+            core:
+              MongoTemplate: DEBUG
