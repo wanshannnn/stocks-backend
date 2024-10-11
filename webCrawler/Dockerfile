@@ -4,6 +4,9 @@ FROM openjdk:8
 # 设置工作目录
 WORKDIR /app
 
+# 替换为国内的 Debian 镜像源
+RUN sed -i 's/deb.debian.org/mirrors.aliyun.com/g' /etc/apt/sources.list
+
 # 安装所需的依赖库
 RUN apt-get update && \
     apt-get install -y \
