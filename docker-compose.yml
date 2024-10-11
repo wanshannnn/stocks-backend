@@ -67,6 +67,8 @@ services:
   data_analysis:
     image: data_analysis
     container_name: data_analysis
+    depends_on:
+      - stock
     networks:
       - st_backend
     ports:
