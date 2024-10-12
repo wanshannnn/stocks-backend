@@ -16,11 +16,6 @@ public class StockGrpcServiceImpl extends StockServiceGrpc.StockServiceImplBase 
     @Autowired
     private StockDataService stockDataService;
 
-    /*
-    1. 接受 client 提供的参数 request.getParameter()
-    2. 业务处理 service + dao 调用对应的业务功能
-    3. 提供返回值
-     */
     @Override
     public void getStock1(StockServiceProto.StockRequest1 request, StreamObserver<StockServiceProto.StockResponse1> responseObserver) {
         // 1. 接受 client 提供的参数

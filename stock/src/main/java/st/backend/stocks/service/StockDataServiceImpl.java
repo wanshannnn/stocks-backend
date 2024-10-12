@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
+import st.backend.stocks.Response;
 import st.backend.stocks.converter.StockDataConverter;
 import st.backend.stocks.dao.StockData;
 import st.backend.stocks.dto.StockDataDTO;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class StockDataServiceImpl implements StockDataService {
 
+    // 创建日志记录器
     private static final Logger logger = LoggerFactory.getLogger(StockDataServiceImpl.class);
 
     // 构造器注入实现依赖注入
@@ -79,14 +81,17 @@ public class StockDataServiceImpl implements StockDataService {
         query.addCriteria(Criteria.where("id").is(id))
                 .addCriteria(Criteria.where("beijingTime").gt(startTime).lt(endTime))
                 .with(Sort.by(Sort.Direction.ASC, "beijingTime"));
+        long total = mongoTemplate.count(query, "stock_data");
+        logger.info("已查找到id: {} 的 {} 条数据", id, total);
 
         List<StockData> results = mongoTemplate.find(query, StockData.class, "stock_data");
-
         List<StockDataDTO> dataDTOs = results.stream()
                 .map(StockDataConverter::converterStockData)
                 .collect(Collectors.toList());
+        logger.info("已查找到id: {} 在时间 {} 到 {} 内的数据", id, startTime, endTime);
 
         return dataDTOs;
+
     }
 
 
@@ -97,14 +102,17 @@ public class StockDataServiceImpl implements StockDataService {
         query.addCriteria(Criteria.where("name").is(name))
                 .addCriteria(Criteria.where("beijingTime").gt(startTime).lt(endTime))
                 .with(Sort.by(Sort.Direction.ASC, "beijingTime"));
+        long total = mongoTemplate.count(query, "stock_data");
+        logger.info("已查找到name: {} 的 {} 条数据", name, total);
 
         List<StockData> results = mongoTemplate.find(query, StockData.class, "stock_data");
-
         List<StockDataDTO> dataDTOs = results.stream()
                 .map(StockDataConverter::converterStockData)
                 .collect(Collectors.toList());
+        logger.info("已查找到name: {} 在时间 {} 到 {} 内的数据", name, startTime, endTime);
 
         return dataDTOs;
+
     }
 
 
@@ -119,12 +127,14 @@ public class StockDataServiceImpl implements StockDataService {
                 .with(Sort.by("beijingTime").ascending())
                 .with(pageable);
         long total = mongoTemplate.count(query, "stock_data");
+        logger.info("已查找到id: {} 的 {} 条数据", id, total);
 
         List<StockData> results = mongoTemplate.find(query, StockData.class, "stock_data");
-
         List<StockDataDTO> dataDTOs = results.stream()
                 .map(StockDataConverter::converterStockData)
                 .collect(Collectors.toList());
+        logger.info("已查找到id: {} 在时间 {} 到 {} 内的数据，并按页返回", id, startTime, endTime);
+
         return new PageImpl<>(dataDTOs, pageable, total);
 
     }
@@ -140,12 +150,14 @@ public class StockDataServiceImpl implements StockDataService {
                 .addCriteria(Criteria.where("beijingTime").gt(startTime).lt(endTime))
                 .with(pageable);
         long total = mongoTemplate.count(query, "stock_data");
+        logger.info("已查找到name: {} 的 {} 条数据", name, total);
 
         List<StockData> results = mongoTemplate.find(query, StockData.class, "stock_data");
-
         List<StockDataDTO> dataDTOs = results.stream()
                 .map(StockDataConverter::converterStockData)
                 .collect(Collectors.toList());
+        logger.info("已查找到name: {} 在时间 {} 到 {} 内的数据，并按页返回", name, startTime, endTime);
+
         return new PageImpl<>(dataDTOs, pageable, total);
 
     }
@@ -156,6 +168,7 @@ public class StockDataServiceImpl implements StockDataService {
         Query query = new Query();
         query.addCriteria(Criteria.where("id").is(id).and("beijingTime").gte(startTime).lte(endTime));
         mongoTemplate.remove(query, StockData.class, "stock_data");
+        logger.info("已删除id: {} 在时间 {} 到 {} 内的数据", id, startTime, endTime);
     }
 
 
@@ -164,6 +177,7 @@ public class StockDataServiceImpl implements StockDataService {
         Query query = new Query();
         query.addCriteria(Criteria.where("id").is(id));
         mongoTemplate.remove(query, StockData.class, "stock_data");
+        logger.info("已删除id: {} 的全部数据", id);
     }
 
 
@@ -172,6 +186,7 @@ public class StockDataServiceImpl implements StockDataService {
         Query query = new Query();
         query.addCriteria(Criteria.where("name").is(name).and("beijingTime").gte(startTime).lte(endTime));
         mongoTemplate.remove(query, StockData.class, "stock_data");
+        logger.info("已删除name: {} 在时间 {} 到 {} 内的数据", name, startTime, endTime);
     }
 
 
@@ -180,6 +195,7 @@ public class StockDataServiceImpl implements StockDataService {
         Query query = new Query();
         query.addCriteria(Criteria.where("name").is(name));
         mongoTemplate.remove(query, StockData.class, "stock_data");
+        logger.info("已删除name: {} 的全部数据", name);
     }
 
 
@@ -192,26 +208,25 @@ public class StockDataServiceImpl implements StockDataService {
             Date timestamp = sdf.parse(beijingTimeString);
             stockDataDTO.setTimestamp(timestamp);
         } catch (ParseException e) {
-            // 打印错误信息
-            System.err.println("ParseException: " + e.getMessage());
-            e.printStackTrace();
-            // 处理异常，例如返回 null 或抛出自定义异常
+            logger.error("无法将 beijingTime: {} 转化为时间戳", beijingTimeString, e);
             return null;
         }
         StockData stockData = StockDataConverter.converterStockDataDTO(stockDataDTO);
         StockData savedResult = mongoTemplate.save(stockData, "stock_data");
         StockDataDTO savedDTO = StockDataConverter.converterStockData(savedResult);
+        logger.info("成功将数据储存在 collection: stock_data");
         return savedDTO;
     }
 
 
     @Override
     public List<StockDataDTO> updateStockDataById(String id, StockDataDTO stockDataDTO) {
-        // 查找所有具有相同 ID 的记录
-        Query query = new Query(Criteria.where("id").is(id));
+
+        Query query = new Query(Criteria.where("id").is(id)); // 查找所有具有相同 ID 的记录
         List<StockData> results = mongoTemplate.find(query, StockData.class, "stock_data");
         if (results.isEmpty()) {
-            throw new IllegalArgumentException("No records found with the specified ID.");
+            logger.warn("没有找到指定 ID 的记录: {}", id);
+            return null;
         }
         List<StockDataDTO> updatedResults = new ArrayList<>();
         for (StockData result : results) {
@@ -245,18 +260,21 @@ public class StockDataServiceImpl implements StockDataService {
             // 保存更新后的结果
             StockData savedResult = mongoTemplate.save(result, "stock_data");
             updatedResults.add(StockDataConverter.converterStockData(savedResult));
+
         }
+        logger.info("已更新id: {} 的数据", id);
         return updatedResults;
     }
 
 
     @Override
     public List<StockDataDTO> updateStockDataByName(String name, StockDataDTO stockDataDTO) {
-        // 查找所有具有相同 ID 的记录
-        Query query = new Query(Criteria.where("name").is(name));
+
+        Query query = new Query(Criteria.where("name").is(name)); // 查找所有具有相同 name 的记录
         List<StockData> results = mongoTemplate.find(query, StockData.class, "stock_data");
         if (results.isEmpty()) {
-            throw new IllegalArgumentException("No records found with the specified Name.");
+            logger.warn("没有找到指定 name 的记录: {}", name);
+            return null;
         }
         List<StockDataDTO> updatedResults = new ArrayList<>();
         for (StockData result : results) {
@@ -291,6 +309,7 @@ public class StockDataServiceImpl implements StockDataService {
             StockData savedResult = mongoTemplate.save(result, "stock_data");
             updatedResults.add(StockDataConverter.converterStockData(savedResult));
         }
+        logger.info("已更新name: {} 的数据", name);
         return updatedResults;
     }
 
