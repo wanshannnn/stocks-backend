@@ -1,6 +1,8 @@
 package st.backend.stocks.controller;
 
-import lombok.extern.slf4j.Slf4j;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,18 +18,18 @@ import java.util.List;
 import static st.backend.stocks.Response.*;
 
 @RestController
-@Slf4j
 @RequestMapping("/stocks")
 public class StockDataController {
 
     @Autowired
     private StockDataService stockDataService;
 
-    /**
-     *
-     * @param id 对应于股票代码
-     * @return 返回股票的最新数据
-     */
+
+    @Operation(summary = "获取最新的股票数据", description = "根据股票代码 id 获取该股票的最新数据")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "成功返回股票数据"),
+            @ApiResponse(responseCode = "404", description = "未找到该股票代码 id 对应的数据")
+    })
     @GetMapping("/id/{id}/latest")
     public Response<StockDataDTO> getLatestStockDataById(@PathVariable String id) {
         StockDataDTO data = stockDataService.getLatestStockDataById(id);
@@ -38,11 +40,12 @@ public class StockDataController {
         }
     }
 
-    /**
-     *
-     * @param name 对应于股票名称
-     * @return 返回股票的最新数据
-     */
+
+    @Operation(summary = "获取最新的股票数据", description = "根据股票名称 name 获取该股票的最新数据")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "成功返回股票数据"),
+            @ApiResponse(responseCode = "404", description = "未找到该股票名称 name 对应的数据")
+    })
     @GetMapping("/name/{name}/latest")
     public Response<StockDataDTO> getLatestStockDataByName(@PathVariable String name) {
         StockDataDTO data =  stockDataService.getLatestStockDataByName(name);
@@ -53,23 +56,24 @@ public class StockDataController {
         }
     }
 
-    /**
-     *
-     * @param id 对应于股票代码
-     * @param startTime 对应于查询的开始时间，默认为2024-01-01 01:01:00
-     * @param endTime 对应于查询的结束时间，默认为2024-12-31 23:59:00
-     * @return 返回股票在查询时间内的全部数据
-     */
+
+    @Operation(summary = "获取股票数据", description = "根据股票代码 id 以及查询时间 startTime, endTime 获取该股票在查询时间内的数据。" +
+            "如果未提供查询时间，默认返回该股票的所有数据。")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "成功返回股票数据"),
+            @ApiResponse(responseCode = "404", description = "未找到该股票代码 id 对应的数据")
+    })
     @GetMapping("/id/{id}/query")
     public Response<List<StockDataDTO>> getStockDataByIdAndTimeRange(
             @PathVariable String id,
-            @RequestParam(defaultValue = "202401010101") Long startTime,
-            @RequestParam(defaultValue = "202412312359") Long endTime) {
+            @RequestParam(required = false) Long startTime,
+            @RequestParam(required = false) Long endTime) {
+        List<StockDataDTO> data;
         if (startTime == null || endTime == null) {
-            return Response.newFail("Missing required parameters: startTime and/or endTime", 400);
+            data = stockDataService.getAllStockDataById(id);
+        } else {
+            data = stockDataService.getStockDataByIdAndTimeRange(id, startTime, endTime);
         }
-
-        List<StockDataDTO> data = stockDataService.getStockDataByIdAndTimeRange(id, startTime, endTime);
 
         if (data == null || data.isEmpty()) {
             return Response.newFail("No data found for stock ID: " + id + " within the specified time range", 404);
@@ -78,23 +82,24 @@ public class StockDataController {
         }
     }
 
-    /**
-     *
-     * @param name 对应于股票名称
-     * @param startTime 对应于查询的开始时间，默认为2024-01-01 01:01:00
-     * @param endTime 对应于查询的结束时间，默认为2024-12-31 23:59:00
-     * @return 返回股票在查询时间内的全部数据
-     */
+
+    @Operation(summary = "获取股票数据", description = "根据股票名称 name 以及查询时间 startTime, endTime 获取该股票在查询时间内的数据。" +
+            "如果未提供查询时间，默认返回该股票的所有数据。")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "成功返回股票数据"),
+            @ApiResponse(responseCode = "404", description = "未找到该股票名称 name 对应的数据")
+    })
     @GetMapping("/name/{name}/query")
     public Response<List<StockDataDTO>> getStockDataByNameAndTimeRange(
             @PathVariable String name,
-            @RequestParam(defaultValue = "202401010101") Long startTime,
-            @RequestParam(defaultValue = "202412312359") Long endTime) {
+            @RequestParam(required = false) Long startTime,
+            @RequestParam(required = false) Long endTime) {
+        List<StockDataDTO> data;
         if (startTime == null || endTime == null) {
-            return Response.newFail("Missing required parameters: startTime and/or endTime", 400);
+            data = stockDataService.getAllStockDataByName(name);
+        } else {
+            data = stockDataService.getStockDataByNameAndTimeRange(name, startTime, endTime);
         }
-
-        List<StockDataDTO> data = stockDataService.getStockDataByNameAndTimeRange(name, startTime, endTime);
 
         if (data == null || data.isEmpty()) {
             return Response.newFail("No data found for stock name: " + name + " within the specified time range", 404);
@@ -103,29 +108,30 @@ public class StockDataController {
         }
     }
 
-    /**
-     *
-     * @param id 对应于股票代码
-     * @param startTime 对应于查询的开始时间，默认为2024-01-01 01:01:00
-     * @param endTime 对应于查询的结束时间，默认为2024-12-31 23:59:00
-     * @param page 对应于查询的页数，默认为0
-     * @param size 对应于每页的数据数量，默认一页返回20条数据
-     * @return 返回股票在查询时期内的全部数据，按页返回
-     */
+
+    @Operation(summary = "按页获取股票数据", description = "根据股票代码 id 以及查询时间 startTime, endTime 获取该股票在查询时间内的数据，按页返回。" +
+            "如果未提供查询时间，默认返回该股票的所有数据。" +
+            "如未提供 返回页码 page 与 每页数据数量 size，默认返回第 0 页数据，每页 20 条。")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "成功返回股票数据"),
+            @ApiResponse(responseCode = "404", description = "未找到该股票代码 id 对应的数据")
+    })
     @GetMapping("/id/{id}/query/page")
     public Response<Page<StockDataDTO>> getStockDataByIdAndTimeRangeByPage (
             @PathVariable String id,
-            @RequestParam(defaultValue = "202401010101") Long startTime,
-            @RequestParam(defaultValue = "202412312359") Long endTime,
+            @RequestParam(required = false) Long startTime,
+            @RequestParam(required = false) Long endTime,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
 
-        if (startTime == null || endTime == null) {
-            return Response.newFail("Missing required parameters: startTime and/or endTime", 400);
-        }
-
         Pageable pageable = PageRequest.of(page, size, Sort.by("beijingTime").ascending());
-        Page<StockDataDTO> data = stockDataService.getStockDataByIdAndTimeRangeByPage(id, startTime, endTime, pageable);
+        Page<StockDataDTO> data;
+
+        if (startTime == null || endTime == null) {
+            data = stockDataService.getAllStockDataByIdAndPage(id, pageable);
+        } else {
+            data = stockDataService.getStockDataByIdAndTimeRangeByPage(id, startTime, endTime, pageable);
+        }
 
         if (data == null || data.isEmpty()) {
             return Response.newFail("No data found for stock ID: " + id + " within the specified time range", 404);
@@ -134,29 +140,30 @@ public class StockDataController {
         }
     }
 
-    /**
-     *
-     * @param name 对应于股票名称
-     * @param startTime 对应于查询的开始时间，默认为2024-01-01 01:01:00
-     * @param endTime 对应于查询的结束时间，默认为2024-12-31 23:59:00
-     * @param page 对应于查询的页数，默认为0
-     * @param size 对应于每页的数据数量，默认一页返回20条数据
-     * @return 返回股票在查询时期内的全部数据，按页返回
-     */
+
+    @Operation(summary = "按页获取股票数据", description = "根据股票名称 name 以及查询时间 startTime, endTime 获取该股票在查询时间内的数据，按页返回。" +
+            "如果未提供查询时间，默认返回该股票的所有数据。" +
+            "如未提供 返回页码 page 与 每页数据数量 size，默认返回第 0 页数据，每页 20 条。")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "成功返回股票数据"),
+            @ApiResponse(responseCode = "404", description = "未找到该股票名称 name 对应的数据")
+    })
     @GetMapping("/name/{name}/query/page")
     public Response<Page<StockDataDTO>> getStockDataByNameAndTimeRangeByPage(
             @PathVariable String name,
-            @RequestParam(defaultValue = "202401010101") Long startTime,
-            @RequestParam(defaultValue = "202412312359") Long endTime,
+            @RequestParam(required = false) Long startTime,
+            @RequestParam(required = false) Long endTime,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
 
-        if (startTime == null || endTime == null) {
-            return Response.newFail("Missing required parameters: startTime and/or endTime", 400);
-        }
-
         Pageable pageable = PageRequest.of(page, size, Sort.by("beijingTime").ascending());
-        Page<StockDataDTO> data = stockDataService.getStockDataByNameAndTimeRangeByPage(name, startTime, endTime, pageable);
+        Page<StockDataDTO> data;
+
+        if (startTime == null || endTime == null) {
+            data = stockDataService.getAllStockDataByNameAndPage(name, pageable);
+        } else {
+            data = stockDataService.getStockDataByNameAndTimeRangeByPage(name, startTime, endTime, pageable);
+        }
 
         if (data == null || data.isEmpty()) {
             return Response.newFail("No data found for stock name: " + name + " within the specified time range", 404);
@@ -165,62 +172,75 @@ public class StockDataController {
         }
     }
 
-    /**
-     * 根据 id 与起止时间删除股票数据，如果没有提供时间，则默认删除股票的全部数据
-     */
+
+    @Operation(summary = "删除股票数据", description = "根据股票代码 id 以及查询时间 startTime, endTime 删除该股票在查询时间内的数据。" +
+            "如果未提供查询时间，默认删除该股票的所有数据。")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "成功删除股票数据"),
+            @ApiResponse(responseCode = "404", description = "未找到该股票代码 id 对应的数据")
+    })
     @DeleteMapping("/id/{id}/delete")
     public void deleteStockDataByIdAndTimeRange(
             @PathVariable String id,
             @RequestParam(required = false) Long startTime,
             @RequestParam(required = false) Long endTime) {
 
-        // 如果未提供 startTime 和 endTime，则删除该股票 id 的所有数据
         if (startTime == null || endTime == null) {
             stockDataService.deleteAllStockDataById(id);
         } else {
-            // 提供了 startTime 和 endTime，删除时间范围内的数据
             stockDataService.deleteStockDataByIdAndTimeRange(id, startTime, endTime);
         }
     }
 
-    /**
-     * 根据 name 与起止时间删除股票数据，如果没有提供时间，则默认删除股票的全部数据
-     */
+
+    @Operation(summary = "删除股票数据", description = "根据股票名称 name 以及查询时间 startTime, endTime 删除该股票在查询时间内的数据。" +
+            "如果未提供查询时间，默认删除该股票的所有数据。")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "成功删除股票数据"),
+            @ApiResponse(responseCode = "404", description = "未找到该股票名称 name 对应的数据")
+    })
     @DeleteMapping("/name/{name}/delete")
     public void deleteStockDataByNameAndTimeRange(
             @PathVariable String name,
             @RequestParam(required = false) Long startTime,
             @RequestParam(required = false) Long endTime) {
 
-        // 如果未提供 startTime 和 endTime，则删除该股票 name 的所有数据
         if (startTime == null || endTime == null) {
             stockDataService.deleteAllStockDataByName(name);
         } else {
-            // 提供了 startTime 和 endTime，删除时间范围内的数据
             stockDataService.deleteStockDataByNameAndTimeRange(name, startTime, endTime);
         }
     }
 
-    /**
-     * 增加股票数据
-     */
+
+    @Operation(summary = "增加股票数据")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "成功增加股票数据"),
+            @ApiResponse(responseCode = "400", description = "json数据存在错误")
+    })
     @PostMapping("/add")
     public Response<StockDataDTO> addStockData(@RequestBody StockDataDTO stockDataDTO) {
         return Response.newSuccess(stockDataService.addStockData(stockDataDTO));
     }
 
-    /**
-     * 根据 id 更新股票数据
-     */
+
+    @Operation(summary = "修改股票数据", description = "根据股票代码 id 修改该股票的数据。")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "成功修改股票数据"),
+            @ApiResponse(responseCode = "404", description = "未找到该股票代码 id 对应的数据")
+    })
     @PutMapping("/id/{id}/update")
     public Response<List<StockDataDTO>> updateStockDataById(@PathVariable String id, @RequestBody StockDataDTO stockDataDTO) {
         List<StockDataDTO> updatedResults = stockDataService.updateStockDataById(id, stockDataDTO);
         return Response.newSuccess(updatedResults);
     }
 
-    /**
-     * 根据 name 更新股票数据
-     */
+
+    @Operation(summary = "修改股票数据", description = "根据股票名称 name 修改该股票的数据。")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "成功修改股票数据"),
+            @ApiResponse(responseCode = "404", description = "未找到该股票名称 name 对应的数据")
+    })
     @PutMapping("/name/{name}/update")
     public Response<List<StockDataDTO>> updateStockDataByName(@PathVariable String name, @RequestBody StockDataDTO stockDataDTO) {
         List<StockDataDTO> updatedResults = stockDataService.updateStockDataByName(name, stockDataDTO);

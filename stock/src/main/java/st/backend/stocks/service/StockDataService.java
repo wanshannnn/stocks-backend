@@ -12,6 +12,10 @@ public interface StockDataService {
 
     StockDataDTO getLatestStockDataByName(String name);
 
+    List<StockDataDTO> getAllStockDataById(String id);
+
+    List<StockDataDTO> getAllStockDataByName(String name);
+
     List<StockDataDTO> getStockDataByIdAndTimeRange(
             String id,
             long startTime,
@@ -21,6 +25,14 @@ public interface StockDataService {
             String name,
             long startTime,
             long endTime);
+
+    Page<StockDataDTO> getAllStockDataByIdAndPage(
+            String id,
+            Pageable pageable);
+
+    Page<StockDataDTO> getAllStockDataByNameAndPage(
+            String name,
+            Pageable pageable);
 
     Page<StockDataDTO> getStockDataByIdAndTimeRangeByPage(
             String id,
@@ -34,13 +46,13 @@ public interface StockDataService {
             long endTime,
             Pageable pageable);
 
-    void deleteStockDataByIdAndTimeRange(String id, Long startTime, Long endTime);
-
     void deleteAllStockDataById(String id);
 
-    void deleteStockDataByNameAndTimeRange(String name, Long startTime, Long endTime);
-
     void deleteAllStockDataByName(String name);
+
+    void deleteStockDataByIdAndTimeRange(String id, Long startTime, Long endTime);
+
+    void deleteStockDataByNameAndTimeRange(String name, Long startTime, Long endTime);
 
     StockDataDTO addStockData(StockDataDTO stockDataDTO);
 
