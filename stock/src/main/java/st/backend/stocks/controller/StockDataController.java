@@ -1,5 +1,6 @@
 package st.backend.stocks.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -17,6 +18,7 @@ import java.util.List;
 
 import static st.backend.stocks.Response.*;
 
+@Api(tags = "股票基本数据")
 @RestController
 @RequestMapping("/stocks")
 public class StockDataController {

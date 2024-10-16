@@ -13,8 +13,8 @@ def root():
 @app.get("/analysis/id/{id}")
 async def get_stock_analysis_by_id(
         id: str,
-        start_time: int = Query(202401010101),
-        end_time: int = Query(202412312359)):
+        start_time: int,
+        end_time: int):
     logger.info(f"Received request with id: {id}, start_time: {start_time}, end_time: {end_time}")
     analysis_result = await service.StockData.get_stock_analysis_by_id(id, start_time, end_time)
     logger.info(f"Returning analysis result for id: {id}")
@@ -23,8 +23,8 @@ async def get_stock_analysis_by_id(
 @app.get("/analysis/name/{name}")
 async def get_stock_analysis_by_name(
         name: str,
-        start_time: int = Query(202401010101),
-        end_time: int = Query(202412312359)):
+        start_time: int,
+        end_time: int):
     logger.info(f"Received request with name: {name}, start_time: {start_time}, end_time: {end_time}")
     analysis_result = await service.StockData.get_stock_analysis_by_name(name, start_time, end_time)
     logger.info(f"Returning analysis result for name: {name}")
