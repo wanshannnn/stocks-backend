@@ -1,9 +1,12 @@
 package st.backend.stocks.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 
+@ApiModel(value = "StockData DTO")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class StockDataDTO {
 

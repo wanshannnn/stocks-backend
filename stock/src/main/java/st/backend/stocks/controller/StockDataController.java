@@ -1,9 +1,6 @@
 package st.backend.stocks.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,12 +23,8 @@ public class StockDataController {
     @Autowired
     private StockDataService stockDataService;
 
-
-    @Operation(summary = "获取最新的股票数据", description = "根据股票代码 id 获取该股票的最新数据")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "成功返回股票数据"),
-            @ApiResponse(responseCode = "404", description = "未找到该股票代码 id 对应的数据")
-    })
+    @ApiOperation("获取最新的股票数据")
+    @ApiImplicitParam(name = "id", value = "股票代码", required = true)
     @GetMapping("/id/{id}/latest")
     public Response<StockDataDTO> getLatestStockDataById(@PathVariable String id) {
         StockDataDTO data = stockDataService.getLatestStockDataById(id);
@@ -43,11 +36,8 @@ public class StockDataController {
     }
 
 
-    @Operation(summary = "获取最新的股票数据", description = "根据股票名称 name 获取该股票的最新数据")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "成功返回股票数据"),
-            @ApiResponse(responseCode = "404", description = "未找到该股票名称 name 对应的数据")
-    })
+    @ApiOperation(value = "获取最新的股票数据")
+    @ApiImplicitParam(name = "id", value = "股票代码", required = true)
     @GetMapping("/name/{name}/latest")
     public Response<StockDataDTO> getLatestStockDataByName(@PathVariable String name) {
         StockDataDTO data =  stockDataService.getLatestStockDataByName(name);
@@ -59,12 +49,8 @@ public class StockDataController {
     }
 
 
-    @Operation(summary = "获取股票数据", description = "根据股票代码 id 以及查询时间 startTime, endTime 获取该股票在查询时间内的数据。" +
-            "如果未提供查询时间，默认返回该股票的所有数据。")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "成功返回股票数据"),
-            @ApiResponse(responseCode = "404", description = "未找到该股票代码 id 对应的数据")
-    })
+    @ApiOperation(value = "获取股票数据", notes = "根据股票代码 id 以及查询时间 startTime, endTime 获取该股票在查询时间内的数据。" +
+            "如果未提供查询时间，是默认返回该股票的所有数据。")
     @GetMapping("/id/{id}/query")
     public Response<List<StockDataDTO>> getStockDataByIdAndTimeRange(
             @PathVariable String id,
@@ -85,12 +71,8 @@ public class StockDataController {
     }
 
 
-    @Operation(summary = "获取股票数据", description = "根据股票名称 name 以及查询时间 startTime, endTime 获取该股票在查询时间内的数据。" +
+    @ApiOperation(value = "获取股票数据", notes = "根据股票名称 name 以及查询时间 startTime, endTime 获取该股票在查询时间内的数据。" +
             "如果未提供查询时间，默认返回该股票的所有数据。")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "成功返回股票数据"),
-            @ApiResponse(responseCode = "404", description = "未找到该股票名称 name 对应的数据")
-    })
     @GetMapping("/name/{name}/query")
     public Response<List<StockDataDTO>> getStockDataByNameAndTimeRange(
             @PathVariable String name,
@@ -111,13 +93,9 @@ public class StockDataController {
     }
 
 
-    @Operation(summary = "按页获取股票数据", description = "根据股票代码 id 以及查询时间 startTime, endTime 获取该股票在查询时间内的数据，按页返回。" +
+    @ApiOperation(value = "按页获取股票数据", notes = "根据股票代码 id 以及查询时间 startTime, endTime 获取该股票在查询时间内的数据，按页返回。" +
             "如果未提供查询时间，默认返回该股票的所有数据。" +
             "如未提供 返回页码 page 与 每页数据数量 size，默认返回第 0 页数据，每页 20 条。")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "成功返回股票数据"),
-            @ApiResponse(responseCode = "404", description = "未找到该股票代码 id 对应的数据")
-    })
     @GetMapping("/id/{id}/query/page")
     public Response<Page<StockDataDTO>> getStockDataByIdAndTimeRangeByPage (
             @PathVariable String id,
@@ -143,13 +121,9 @@ public class StockDataController {
     }
 
 
-    @Operation(summary = "按页获取股票数据", description = "根据股票名称 name 以及查询时间 startTime, endTime 获取该股票在查询时间内的数据，按页返回。" +
+    @ApiOperation(value = "按页获取股票数据", notes = "根据股票名称 name 以及查询时间 startTime, endTime 获取该股票在查询时间内的数据，按页返回。" +
             "如果未提供查询时间，默认返回该股票的所有数据。" +
             "如未提供 返回页码 page 与 每页数据数量 size，默认返回第 0 页数据，每页 20 条。")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "成功返回股票数据"),
-            @ApiResponse(responseCode = "404", description = "未找到该股票名称 name 对应的数据")
-    })
     @GetMapping("/name/{name}/query/page")
     public Response<Page<StockDataDTO>> getStockDataByNameAndTimeRangeByPage(
             @PathVariable String name,
@@ -175,12 +149,8 @@ public class StockDataController {
     }
 
 
-    @Operation(summary = "删除股票数据", description = "根据股票代码 id 以及查询时间 startTime, endTime 删除该股票在查询时间内的数据。" +
+    @ApiOperation(value = "删除股票数据", notes = "根据股票代码 id 以及查询时间 startTime, endTime 删除该股票在查询时间内的数据。" +
             "如果未提供查询时间，默认删除该股票的所有数据。")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "成功删除股票数据"),
-            @ApiResponse(responseCode = "404", description = "未找到该股票代码 id 对应的数据")
-    })
     @DeleteMapping("/id/{id}/delete")
     public void deleteStockDataByIdAndTimeRange(
             @PathVariable String id,
@@ -195,12 +165,8 @@ public class StockDataController {
     }
 
 
-    @Operation(summary = "删除股票数据", description = "根据股票名称 name 以及查询时间 startTime, endTime 删除该股票在查询时间内的数据。" +
+    @ApiOperation(value = "删除股票数据", notes = "根据股票名称 name 以及查询时间 startTime, endTime 删除该股票在查询时间内的数据。" +
             "如果未提供查询时间，默认删除该股票的所有数据。")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "成功删除股票数据"),
-            @ApiResponse(responseCode = "404", description = "未找到该股票名称 name 对应的数据")
-    })
     @DeleteMapping("/name/{name}/delete")
     public void deleteStockDataByNameAndTimeRange(
             @PathVariable String name,
@@ -215,22 +181,14 @@ public class StockDataController {
     }
 
 
-    @Operation(summary = "增加股票数据")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "成功增加股票数据"),
-            @ApiResponse(responseCode = "400", description = "json数据存在错误")
-    })
+    @ApiOperation(value = "增加股票数据")
     @PostMapping("/add")
     public Response<StockDataDTO> addStockData(@RequestBody StockDataDTO stockDataDTO) {
         return Response.newSuccess(stockDataService.addStockData(stockDataDTO));
     }
 
 
-    @Operation(summary = "修改股票数据", description = "根据股票代码 id 修改该股票的数据。")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "成功修改股票数据"),
-            @ApiResponse(responseCode = "404", description = "未找到该股票代码 id 对应的数据")
-    })
+    @ApiOperation(value = "修改股票数据", notes = "根据股票代码 id 修改该股票的数据。")
     @PutMapping("/id/{id}/update")
     public Response<List<StockDataDTO>> updateStockDataById(@PathVariable String id, @RequestBody StockDataDTO stockDataDTO) {
         List<StockDataDTO> updatedResults = stockDataService.updateStockDataById(id, stockDataDTO);
@@ -238,11 +196,7 @@ public class StockDataController {
     }
 
 
-    @Operation(summary = "修改股票数据", description = "根据股票名称 name 修改该股票的数据。")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "成功修改股票数据"),
-            @ApiResponse(responseCode = "404", description = "未找到该股票名称 name 对应的数据")
-    })
+    @ApiOperation(value = "修改股票数据", notes = "根据股票名称 name 修改该股票的数据。")
     @PutMapping("/name/{name}/update")
     public Response<List<StockDataDTO>> updateStockDataByName(@PathVariable String name, @RequestBody StockDataDTO stockDataDTO) {
         List<StockDataDTO> updatedResults = stockDataService.updateStockDataByName(name, stockDataDTO);

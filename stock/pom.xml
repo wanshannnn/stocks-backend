@@ -37,13 +37,12 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Springboot2 + openapi2 + Knife4j 自动生成api文档-->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
             <version>1.7.0</version>
         </dependency>
-
-        <!-- Knife4j -->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-openapi2-spring-boot-starter</artifactId>
