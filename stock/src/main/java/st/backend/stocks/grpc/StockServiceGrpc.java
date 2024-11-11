@@ -1,4 +1,4 @@
-package st.backend.stocks;
+package st.backend.stocks.grpc;
 
 import static io.grpc.MethodDescriptor.generateFullMethodName;
 
@@ -15,29 +15,29 @@ public final class StockServiceGrpc {
   public static final String SERVICE_NAME = "StockService";
 
   // Static method descriptors that strictly reflect the proto.
-  private static volatile io.grpc.MethodDescriptor<st.backend.stocks.StockServiceProto.StockRequest1,
-      st.backend.stocks.StockServiceProto.StockResponse1> getGetStock1Method;
+  private static volatile io.grpc.MethodDescriptor<StockServiceProto.StockRequest1,
+      StockServiceProto.StockResponse1> getGetStock1Method;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "GetStock1",
-      requestType = st.backend.stocks.StockServiceProto.StockRequest1.class,
-      responseType = st.backend.stocks.StockServiceProto.StockResponse1.class,
+      requestType = StockServiceProto.StockRequest1.class,
+      responseType = StockServiceProto.StockResponse1.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<st.backend.stocks.StockServiceProto.StockRequest1,
-      st.backend.stocks.StockServiceProto.StockResponse1> getGetStock1Method() {
-    io.grpc.MethodDescriptor<st.backend.stocks.StockServiceProto.StockRequest1, st.backend.stocks.StockServiceProto.StockResponse1> getGetStock1Method;
+  public static io.grpc.MethodDescriptor<StockServiceProto.StockRequest1,
+      StockServiceProto.StockResponse1> getGetStock1Method() {
+    io.grpc.MethodDescriptor<StockServiceProto.StockRequest1, StockServiceProto.StockResponse1> getGetStock1Method;
     if ((getGetStock1Method = StockServiceGrpc.getGetStock1Method) == null) {
       synchronized (StockServiceGrpc.class) {
         if ((getGetStock1Method = StockServiceGrpc.getGetStock1Method) == null) {
           StockServiceGrpc.getGetStock1Method = getGetStock1Method =
-              io.grpc.MethodDescriptor.<st.backend.stocks.StockServiceProto.StockRequest1, st.backend.stocks.StockServiceProto.StockResponse1>newBuilder()
+              io.grpc.MethodDescriptor.<StockServiceProto.StockRequest1, StockServiceProto.StockResponse1>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "GetStock1"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  st.backend.stocks.StockServiceProto.StockRequest1.getDefaultInstance()))
+                  StockServiceProto.StockRequest1.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  st.backend.stocks.StockServiceProto.StockResponse1.getDefaultInstance()))
+                  StockServiceProto.StockResponse1.getDefaultInstance()))
               .setSchemaDescriptor(new StockServiceMethodDescriptorSupplier("GetStock1"))
               .build();
         }
@@ -46,29 +46,29 @@ public final class StockServiceGrpc {
     return getGetStock1Method;
   }
 
-  private static volatile io.grpc.MethodDescriptor<st.backend.stocks.StockServiceProto.StockRequest2,
-      st.backend.stocks.StockServiceProto.StockResponse2> getGetStock2Method;
+  private static volatile io.grpc.MethodDescriptor<StockServiceProto.StockRequest2,
+      StockServiceProto.StockResponse2> getGetStock2Method;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "GetStock2",
-      requestType = st.backend.stocks.StockServiceProto.StockRequest2.class,
-      responseType = st.backend.stocks.StockServiceProto.StockResponse2.class,
+      requestType = StockServiceProto.StockRequest2.class,
+      responseType = StockServiceProto.StockResponse2.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<st.backend.stocks.StockServiceProto.StockRequest2,
-      st.backend.stocks.StockServiceProto.StockResponse2> getGetStock2Method() {
-    io.grpc.MethodDescriptor<st.backend.stocks.StockServiceProto.StockRequest2, st.backend.stocks.StockServiceProto.StockResponse2> getGetStock2Method;
+  public static io.grpc.MethodDescriptor<StockServiceProto.StockRequest2,
+      StockServiceProto.StockResponse2> getGetStock2Method() {
+    io.grpc.MethodDescriptor<StockServiceProto.StockRequest2, StockServiceProto.StockResponse2> getGetStock2Method;
     if ((getGetStock2Method = StockServiceGrpc.getGetStock2Method) == null) {
       synchronized (StockServiceGrpc.class) {
         if ((getGetStock2Method = StockServiceGrpc.getGetStock2Method) == null) {
           StockServiceGrpc.getGetStock2Method = getGetStock2Method =
-              io.grpc.MethodDescriptor.<st.backend.stocks.StockServiceProto.StockRequest2, st.backend.stocks.StockServiceProto.StockResponse2>newBuilder()
+              io.grpc.MethodDescriptor.<StockServiceProto.StockRequest2, StockServiceProto.StockResponse2>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "GetStock2"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  st.backend.stocks.StockServiceProto.StockRequest2.getDefaultInstance()))
+                  StockServiceProto.StockRequest2.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  st.backend.stocks.StockServiceProto.StockResponse2.getDefaultInstance()))
+                  StockServiceProto.StockResponse2.getDefaultInstance()))
               .setSchemaDescriptor(new StockServiceMethodDescriptorSupplier("GetStock2"))
               .build();
         }
@@ -127,15 +127,15 @@ public final class StockServiceGrpc {
 
     /**
      */
-    public void getStock1(st.backend.stocks.StockServiceProto.StockRequest1 request,
-        io.grpc.stub.StreamObserver<st.backend.stocks.StockServiceProto.StockResponse1> responseObserver) {
+    public void getStock1(StockServiceProto.StockRequest1 request,
+                          io.grpc.stub.StreamObserver<StockServiceProto.StockResponse1> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetStock1Method(), responseObserver);
     }
 
     /**
      */
-    public void getStock2(st.backend.stocks.StockServiceProto.StockRequest2 request,
-        io.grpc.stub.StreamObserver<st.backend.stocks.StockServiceProto.StockResponse2> responseObserver) {
+    public void getStock2(StockServiceProto.StockRequest2 request,
+                          io.grpc.stub.StreamObserver<StockServiceProto.StockResponse2> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetStock2Method(), responseObserver);
     }
 
@@ -145,15 +145,15 @@ public final class StockServiceGrpc {
             getGetStock1Method(),
             io.grpc.stub.ServerCalls.asyncUnaryCall(
               new MethodHandlers<
-                st.backend.stocks.StockServiceProto.StockRequest1,
-                st.backend.stocks.StockServiceProto.StockResponse1>(
+                StockServiceProto.StockRequest1,
+                StockServiceProto.StockResponse1>(
                   this, METHODID_GET_STOCK1)))
           .addMethod(
             getGetStock2Method(),
             io.grpc.stub.ServerCalls.asyncUnaryCall(
               new MethodHandlers<
-                st.backend.stocks.StockServiceProto.StockRequest2,
-                st.backend.stocks.StockServiceProto.StockResponse2>(
+                StockServiceProto.StockRequest2,
+                StockServiceProto.StockResponse2>(
                   this, METHODID_GET_STOCK2)))
           .build();
     }
@@ -175,16 +175,16 @@ public final class StockServiceGrpc {
 
     /**
      */
-    public void getStock1(st.backend.stocks.StockServiceProto.StockRequest1 request,
-        io.grpc.stub.StreamObserver<st.backend.stocks.StockServiceProto.StockResponse1> responseObserver) {
+    public void getStock1(StockServiceProto.StockRequest1 request,
+                          io.grpc.stub.StreamObserver<StockServiceProto.StockResponse1> responseObserver) {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getGetStock1Method(), getCallOptions()), request, responseObserver);
     }
 
     /**
      */
-    public void getStock2(st.backend.stocks.StockServiceProto.StockRequest2 request,
-        io.grpc.stub.StreamObserver<st.backend.stocks.StockServiceProto.StockResponse2> responseObserver) {
+    public void getStock2(StockServiceProto.StockRequest2 request,
+                          io.grpc.stub.StreamObserver<StockServiceProto.StockResponse2> responseObserver) {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getGetStock2Method(), getCallOptions()), request, responseObserver);
     }
@@ -206,14 +206,14 @@ public final class StockServiceGrpc {
 
     /**
      */
-    public st.backend.stocks.StockServiceProto.StockResponse1 getStock1(st.backend.stocks.StockServiceProto.StockRequest1 request) {
+    public StockServiceProto.StockResponse1 getStock1(StockServiceProto.StockRequest1 request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getGetStock1Method(), getCallOptions(), request);
     }
 
     /**
      */
-    public st.backend.stocks.StockServiceProto.StockResponse2 getStock2(st.backend.stocks.StockServiceProto.StockRequest2 request) {
+    public StockServiceProto.StockResponse2 getStock2(StockServiceProto.StockRequest2 request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getGetStock2Method(), getCallOptions(), request);
     }
@@ -235,16 +235,16 @@ public final class StockServiceGrpc {
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<st.backend.stocks.StockServiceProto.StockResponse1> getStock1(
-        st.backend.stocks.StockServiceProto.StockRequest1 request) {
+    public com.google.common.util.concurrent.ListenableFuture<StockServiceProto.StockResponse1> getStock1(
+        StockServiceProto.StockRequest1 request) {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getGetStock1Method(), getCallOptions()), request);
     }
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<st.backend.stocks.StockServiceProto.StockResponse2> getStock2(
-        st.backend.stocks.StockServiceProto.StockRequest2 request) {
+    public com.google.common.util.concurrent.ListenableFuture<StockServiceProto.StockResponse2> getStock2(
+        StockServiceProto.StockRequest2 request) {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getGetStock2Method(), getCallOptions()), request);
     }
@@ -271,12 +271,12 @@ public final class StockServiceGrpc {
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
         case METHODID_GET_STOCK1:
-          serviceImpl.getStock1((st.backend.stocks.StockServiceProto.StockRequest1) request,
-              (io.grpc.stub.StreamObserver<st.backend.stocks.StockServiceProto.StockResponse1>) responseObserver);
+          serviceImpl.getStock1((StockServiceProto.StockRequest1) request,
+              (io.grpc.stub.StreamObserver<StockServiceProto.StockResponse1>) responseObserver);
           break;
         case METHODID_GET_STOCK2:
-          serviceImpl.getStock2((st.backend.stocks.StockServiceProto.StockRequest2) request,
-              (io.grpc.stub.StreamObserver<st.backend.stocks.StockServiceProto.StockResponse2>) responseObserver);
+          serviceImpl.getStock2((StockServiceProto.StockRequest2) request,
+              (io.grpc.stub.StreamObserver<StockServiceProto.StockResponse2>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -300,7 +300,7 @@ public final class StockServiceGrpc {
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.FileDescriptor getFileDescriptor() {
-      return st.backend.stocks.StockServiceProto.getDescriptor();
+      return StockServiceProto.getDescriptor();
     }
 
     @java.lang.Override

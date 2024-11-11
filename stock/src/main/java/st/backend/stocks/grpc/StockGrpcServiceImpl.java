@@ -3,8 +3,6 @@ package st.backend.stocks.grpc;
 import net.devh.boot.grpc.server.service.GrpcService;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
-import st.backend.stocks.StockServiceGrpc;
-import st.backend.stocks.StockServiceProto;
 import st.backend.stocks.service.StockDataService;
 import st.backend.stocks.dto.StockDataDTO;
 
